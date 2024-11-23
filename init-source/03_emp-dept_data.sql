@@ -4,14 +4,8 @@
 /* Daten in Demotabellen einfügen                 */
 /*================================================*/
 
--- The Base Image is using a Pluggable Database (PDB).
-alter session set container=xepdb1;
-
-ALTER SESSION SET nls_date_format = 'DD-MON-YYYY'
-                  nls_date_language = 'AMERICAN';
-
--- -----------
--- Abteilungen
+-- ----------- 
+-- Abteilungen 
 -- -----------
 
 INSERT INTO scott.dept
@@ -30,39 +24,45 @@ INSERT INTO scott.dept
        (deptno, dname, loc )
 VALUES (40, 'OPERATIONS', 'BOSTON');
 
--- -----------
--- Angestellte
+-- ----------- 
+-- Angestellte 
 -- -----------
 
 INSERT INTO scott.emp 
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7369, 'SMITH',  'CLERK',
-        TO_DATE('17-DEC-1980', 'DD-MON-YYYY'),
+        '1980-12-17',
         800, NULL, 20);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7499, 'ALLEN',  'SALESMAN',
-        TO_DATE('20-FEB-1981', 'DD-MON-YYYY'),
+        '1981-02-20',
         1600,  300, 30);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7521, 'WARD',   'SALESMAN',
-        TO_DATE('22-FEB-1981', 'DD-MON-YYYY'),
+        '1981-02-22',
         1250,  500, 30);
 
 INSERT INTO scott.emp 
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7566, 'JONES',  'MANAGER',
-        TO_DATE('2-APR-1981', 'DD-MON-YYYY'),
+        '1981-04-02',
         2975, NULL, 20);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7654, 'MARTIN', 'SALESMAN',
-        TO_DATE('28-SEP-1981', 'DD-MON-YYYY'),
+        '1981-09-28',
         1250, 1400, 30);
+        
+INSERT INTO scott.emp
+       (empno, ename, job, hiredate, sal, comm, deptno)
+VALUES (7698, 'BLAKE',  'MANAGER',
+        '1981-05-01',
+        2850, NULL,
         
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)

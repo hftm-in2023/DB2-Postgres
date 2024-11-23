@@ -5,7 +5,8 @@
 /*================================================*/
 
 -- The Base Image is using a Pluggable Database (PDB).
-alter session set container=xepdb1;
+-- This command is not needed in PostgreSQL
+-- alter session set container=xepdb1;
 
 --
 -- --------------
@@ -67,7 +68,7 @@ VALUES (2, 'Aktiv', 50);
 --
 INSERT INTO vereinuser.status 
        (statid, bezeichner, beitrag)
-VALUES (3, 'Ehemalig', null);
+VALUES (3, 'Ehemalig', NULL);
 --       
 INSERT INTO vereinuser.status 
        (statid, bezeichner, beitrag)
@@ -75,11 +76,11 @@ VALUES (4, 'Passiv', 30);
 --
 INSERT INTO vereinuser.status 
        (statid, bezeichner, beitrag)
-VALUES (5, 'Helfer', null);
+VALUES (5, 'Helfer', NULL);
 --
 INSERT INTO vereinuser.status 
        (statid, bezeichner, beitrag)
-VALUES (6, 'Extern', null);
+VALUES (6, 'Extern', NULL);
 --
 --
 -- ------------
@@ -90,42 +91,42 @@ INSERT INTO vereinuser.person
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (1, 3, 'Niiranen', 'Ulla', 'Nordstr. 113', '2500', 
-        'Biel', '1', NULL, TO_DATE('11-11-2007','DD-MM-YYYY'),
-        TO_DATE('31-03-2011','DD-MM-YYYY'), NULL);
+        'Biel', '1', NULL, '2007-11-11',
+        '2011-03-31', NULL);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (2, 3, 'Wendel', 'Otto', 'Sigriststr. 9', '4500',
-        'Solothurn', '1', NULL, TO_DATE('01-01-2011','DD-MM-YYYY'),
-        TO_DATE('30-11-2014','DD-MM-YYYY'), NULL);
+        'Solothurn', '1', NULL, '2011-01-01',
+        '2014-11-30', NULL);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (3, 2, 'Meyer', 'Dominik', 'Rainstr. 13', '4528',
-        'Zuchwil', '1', NULL, TO_DATE('01-01-2011','DD-MM-YYYY'),
+        'Zuchwil', '1', NULL, '2011-01-01',
         NULL, NULL);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (4, 2, 'Meyer', 'Petra', 'Rainstr. 13', '4528',
-        'Zuchwil', '1', NULL, TO_DATE('15-02-2009','DD-MM-YYYY'),
+        'Zuchwil', '1', NULL, '2009-02-15',
         NULL, NULL);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (5, 2, 'Tamburino', 'Mario', 'Solothurnstr. 96', '2540',
-        'Grenchen', '0', NULL, TO_DATE('30-09-2014','DD-MM-YYYY'),
+        'Grenchen', '0', NULL, '2014-09-30',
         NULL, 4);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (6, 2, 'Bregger', 'Beni', 'Sportstr. 2', '2540',
-        'Grenchen', '1', NULL, TO_DATE('21-05-2012','DD-MM-YYYY'),
+        'Grenchen', '1', NULL, '2012-05-21',
         NULL, 4);
 --
 INSERT INTO vereinuser.person 
@@ -150,21 +151,21 @@ INSERT INTO vereinuser.person
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (10, 1, 'Cadola', 'Leo', 'Sportstr. 2', '4500',
-        'Solothurn', '1', NULL, TO_DATE('01-10-2013','DD-MM-YYYY'),
+        'Solothurn', '1', NULL, '2013-10-01',
         NULL, NULL);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (11, 1, 'Bart', 'Sabine', 'Bernstr. 15', '2540',
-        'Grenchen', '1', NULL, TO_DATE('12-07-2014','DD-MM-YYYY'),
+        'Grenchen', '1', NULL, '2014-07-12',
         NULL, 10);
 --
 INSERT INTO vereinuser.person 
        (persid, statid, name, vorname, strasse_nr, plz, ort,
         bezahlt, bemerkungen, eintritt, austritt, mentorid)
 VALUES (12, 2, 'Gruber', 'Romy', 'Gladbaechli 3', '2545',
-        'Selzach', '0', NULL, TO_DATE('29-11-2009','DD-MM-YYYY'),
+        'Selzach', '0', NULL, '2009-11-29',
         NULL, NULL);
 --
 --
@@ -175,42 +176,42 @@ VALUES (12, 2, 'Gruber', 'Romy', 'Gladbaechli 3', '2545',
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (1, 'GV', 'Solothurn', 
-        TO_DATE('31-03-2013','DD-MM-YYYY'), 200, 2);
+        '2013-03-31', 200, 2);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (2, 'Vorstandssitzung', 'Grenchen',
-        TO_DATE('17-01-2014','DD-MM-YYYY'), NULL, 12);
+        '2014-01-17', NULL, 12);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (3, 'GV', 'Bettlach',
-        TO_DATE('30-03-2013','DD-MM-YYYY'), 200, 6);
+        '2013-03-30', 200, 6);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (4, 'Klaushock', 'Bettlach',
-        TO_DATE('06-12-2014','DD-MM-YYYY'), 150, 7);
+        '2014-12-06', 150, 7);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (5, 'Vorstandssitzung', 'Grenchen',
-        TO_DATE('21-01-2015','DD-MM-YYYY'), NULL, 12);
+        '2015-01-21', NULL, 12);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (6, 'Turnier', 'Biel',
-        TO_DATE('28-02-2014','DD-MM-YYYY'), 1020, 10);
+        '2014-02-28', 1020, 10);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (7, 'GV', 'Grenchenberg',
-        TO_DATE('29-03-2015','DD-MM-YYYY'), 250, 4);
+        '2015-03-29', 250, 4);
 --
 INSERT INTO vereinuser.anlass 
        (anlaid, bezeichner, ort, datum, kosten, orgid)
 VALUES (8, 'Vorstandssitzung', 'Grenchen',
-        TO_DATE('19-01-2015','DD-MM-YYYY'), NULL, 6);
+        '2015-01-19', NULL, 6);
 --
 --
 -- ------------
@@ -220,37 +221,37 @@ VALUES (8, 'Vorstandssitzung', 'Grenchen',
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (1, 5, 6, 'Apéro', 
-        TO_DATE('02-02-2015','DD-MM-YYYY'), 720);
+        '2015-02-02', 720);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (1, 6, NULL, 'Defizittilgung',
-        TO_DATE('13-04-2015','DD-MM-YYYY'), 550);
+        '2015-04-13', 550);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (2, 3, 7, 'Getraenke',
-        TO_DATE('05-03-2015','DD-MM-YYYY'), 600);
+        '2015-03-05', 600);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (2, 4, 6, 'Plakate',
-        TO_DATE('11-03-2015','DD-MM-YYYY'), 300);
+        '2015-03-11', 300);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (2, 5, NULL, 'Defizittilgung',
-        TO_DATE('13-04-2015','DD-MM-YYYY'), 750);
+        '2015-04-13', 750);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (3, 1, 4, 'Gluehwein',
-        TO_DATE('29-11-2014','DD-MM-YYYY'), 200);
+        '2014-11-29', 200);
 --
 INSERT INTO vereinuser.spende
        (sponid, spenid, anlaid, bezeichner, datum, betrag)
 VALUES (3, 2, 7, 'Unterhaltungsmusik',
-        TO_DATE('23-02-2015','DD-MM-YYYY'), 550);
+        '2015-02-23', 550);
 --
 --
 -- ----------------
@@ -293,7 +294,6 @@ INSERT INTO vereinuser.teilnehmer
        (persid, anlaid)
 VALUES (4, 3);
 --
-INSERT INTO vereinuser.teilnehmer
        (persid, anlaid)
 VALUES (6, 3);
 --

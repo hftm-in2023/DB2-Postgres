@@ -4,17 +4,14 @@
 /* Schemen  erzeugen                              */
 /*================================================*/
 
--- The Base Image is using a Pluggable Database (PDB).
-alter session set container=xepdb1;
-
 CREATE
   TABLE vereinuser.Anlass
   (
     AnlaID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR2 (20) NOT NULL ,
-    Ort        VARCHAR2 (20) ,
+    Bezeichner VARCHAR (20) NOT NULL ,
+    Ort        VARCHAR (20) ,
     Datum      DATE NOT NULL ,
-    Kosten     NUMBER (8,2) ,
+    Kosten     NUMERIC (8,2) ,
     OrgID      INTEGER NOT NULL
   ) ;
 ALTER TABLE vereinuser.Anlass ADD CONSTRAINT chk_kosten CHECK ( kosten IS NULL OR
@@ -29,7 +26,7 @@ CREATE
   TABLE vereinuser.Funktion
   (
     FunkID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR2 (20) NOT NULL
+    Bezeichner VARCHAR (20) NOT NULL
   ) ;
 ALTER TABLE vereinuser.Funktion ADD CONSTRAINT Funktion_PK PRIMARY KEY ( FunkID ) ;
 
@@ -43,8 +40,7 @@ CREATE
     PersID     INTEGER NOT NULL
   ) ;
 ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT chk_ruecktritt CHECK ( antritt <=
-ruecktritt OR ruecktritt                                                     IS
-NULL) ;
+ruecktritt OR ruecktritt IS NULL) ;
 ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT Funktionsbesetzung_PK PRIMARY KEY
 ( FunkID, PersID, Antritt ) ;
 
@@ -53,20 +49,20 @@ CREATE
   TABLE vereinuser.Person
   (
     PersID      INTEGER NOT NULL ,
-    Name        VARCHAR2 (20) NOT NULL ,
-    Vorname     VARCHAR2 (15) NOT NULL ,
-    Strasse_Nr  VARCHAR2 (20) NOT NULL ,
+    Name        VARCHAR (20) NOT NULL ,
+    Vorname     VARCHAR (15) NOT NULL ,
+    Strasse_Nr  VARCHAR (20) NOT NULL ,
     PLZ         CHAR (4) NOT NULL ,
-    Ort         VARCHAR2 (20) NOT NULL ,
+    Ort         VARCHAR (20) NOT NULL ,
     bezahlt     CHAR (1) NOT NULL ,
-    Bemerkungen VARCHAR2 (25) ,
+    Bemerkungen VARCHAR (25) ,
     Eintritt    DATE ,
     Austritt    DATE ,
     StatID      INTEGER NOT NULL ,
     MentorID    INTEGER
   ) ;
 ALTER TABLE vereinuser.Person ADD CONSTRAINT chk_austritt CHECK ( (eintritt <= austritt OR
-austritt                                                         IS NULL) OR
+austritt IS NULL) OR
 (
   eintritt IS NULL AND austritt IS NULL
 )
@@ -78,9 +74,9 @@ CREATE
   TABLE vereinuser.Spende
   (
     SpenID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR2 (20) ,
+    Bezeichner VARCHAR (20) ,
     Datum      DATE DEFAULT CURRENT_DATE NOT NULL ,
-    Betrag     NUMBER (8,2) NOT NULL ,
+    Betrag     NUMERIC (8,2) NOT NULL ,
     SponID     INTEGER NOT NULL ,
     AnlaID     INTEGER
   ) ;
@@ -91,11 +87,11 @@ CREATE
   TABLE vereinuser.Sponsor
   (
     SponID       INTEGER NOT NULL ,
-    Name         VARCHAR2 (20) NOT NULL ,
-    Strasse_Nr   VARCHAR2 (20) NOT NULL ,
+    Name         VARCHAR (20) NOT NULL ,
+    Strasse_Nr   VARCHAR (20) NOT NULL ,
     PLZ          CHAR (4) NOT NULL ,
-    Ort          VARCHAR2 (20) NOT NULL ,
-    Spendentotal NUMBER (8,2) NOT NULL
+    Ort          VARCHAR (20) NOT NULL ,
+    Spendentotal NUMERIC (8,2) NOT NULL
   ) ;
 ALTER TABLE vereinuser.Sponsor ADD CONSTRAINT Sponsor_PK PRIMARY KEY ( SponID ) ;
 
@@ -114,8 +110,8 @@ CREATE
   TABLE vereinuser.Status
   (
     StatID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR2 (20) NOT NULL ,
-    Beitrag    NUMBER (5)
+    Bezeichner VARCHAR (20) NOT NULL ,
+    Beitrag    NUMERIC (5)
   ) ;
 ALTER TABLE vereinuser.Status ADD CONSTRAINT chk_beitrag_status CHECK ( beitrag IS NULL OR
 (
