@@ -1,5 +1,5 @@
 -- CREATE TABLESPACE equivalents:
-CREATE TABLESPACE emp_tablespace LOCATION '/var/lib/postgresql/data/emp_tablespace';
+-- CREATE TABLESPACE emp_tablespace LOCATION '/var/lib/postgresql/data/emp_tablespace';
 -- No specific file size or autoextend, as PostgreSQL handles tablespace size based on disk availability
 
 -- CREATE USER equivalents:
