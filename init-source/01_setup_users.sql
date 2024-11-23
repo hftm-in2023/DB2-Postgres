@@ -1,17 +1,28 @@
-alter profile DEFAULT limit password_life_time UNLIMITED;
+-- CREATE TABLESPACE equivalents:
+CREATE TABLESPACE emp_tablespace LOCATION '/var/lib/postgresql/data/emp_tablespace';
+-- No specific file size or autoextend, as PostgreSQL handles tablespace size based on disk availability
 
--- SQLINES DEMO ***  using a Pluggable Database (PDB).
-alter session set container=xepdb1;
+-- CREATE USER equivalents:
+CREATE USER scott WITH PASSWORD 'tiger';
+ALTER USER scott SET default_tablespace = 'emp_tablespace';
+GRANT ALL PRIVILEGES ON TABLESPACE emp_tablespace TO scott;
 
--- SQLINES DEMO *** pace and user for the emp-dept application
-create tablespace emp_tablespace datafile '/opt/oracle/oradata/XE/emp.dbf' SIZE 1M AUTOEXTEND ON NEXT 1M MAXSIZE 100M;
-create user scott identified by tiger default tablespace emp_tablespace QUOTA UNLIMITED ON emp_tablespace;
-grant connect, resource to scott;
+CREATE TABLESPACE verein_tablespace LOCATION '/var/lib/postgresql/data/verein_tablespace';
+-- Same note applies regarding disk size and autoextend
 
--- SQLINES DEMO *** pace and user for the verein application
-create tablespace verein_tablespace datafile '/opt/oracle/oradata/XE/verein.dbf' SIZE 10M AUTOEXTEND ON NEXT 10M MAXSIZE 1024M;
-create user vereinuser identified by vereinuser default tablespace verein_tablespace QUOTA UNLIMITED ON verein_tablespace;
-grant connect, resource to vereinuser;
+CREATE USER vereinuser WITH PASSWORD 'vereinuser';
+ALTER USER vereinuser SET default_tablespace = 'verein_tablespace';
+GRANT ALL PRIVILEGES ON TABLESPACE verein_tablespace TO vereinuser;
 
-GRANT CREATE VIEW TO vereinuser,scott;
-GRANT CREATE MATERIALIZED VIEW TO vereinuser,scott;
+-- Granting Connect and Resource roles
+-- PostgreSQL has no direct equivalent to Oracle's "connect" or "resource" roles. You need to manually define permissions:
+GRANT CONNECT ON DATABASE postgres TO scott;
+GRANT CONNECT ON DATABASE postgres TO vereinuser;
+
+-- Granting specific privileges for view and materialized view creation:
+GRANT CREATE ON SCHEMA public TO scott;
+GRANT CREATE ON SCHEMA public TO vereinuser;
+
+-- Granting create materialized view permission (note that materialized views require superuser or certain settings)
+GRANT CREATE ON SCHEMA public TO scott;
+GRANT CREATE ON SCHEMA public TO vereinuser;

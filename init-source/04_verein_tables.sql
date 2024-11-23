@@ -1,170 +1,114 @@
-/* SQLINES DEMO *** ==============================*/
-/* SQLINES DEMO ***                               */
-/* SQLINES DEMO ***                               */
-/* SQLINES DEMO ***                               */
-/* SQLINES DEMO *** ==============================*/
+-- PostgreSQL equivalent of the given Oracle SQL
 
--- SQLINES DEMO ***  using a Pluggable Database (PDB).
-alter session set container=xepdb1;
+-- Containers (PDB) are an Oracle-specific concept. In PostgreSQL, there is no equivalent needed.
 
--- SQLINES FOR EVALUATION USE ONLY (14 DAYS)
-CREATE
-  TABLE vereinuser.Anlass
-  (
-    AnlaID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR (20) NOT NULL ,
-    Ort        VARCHAR (20) ,
-    Datum      TIMESTAMP(0) NOT NULL ,
-    Kosten     DECIMAL (8,2) ,
-    OrgID      INTEGER NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Anlass ADD CONSTRAINT chk_kosten CHECK ( kosten IS NULL OR
-(
-  kosten >= 0
-)
-) ;
-ALTER TABLE vereinuser.Anlass ADD CONSTRAINT Anlass_PK PRIMARY KEY ( AnlaID ) ;
+-- Creating "Anlass" table
+CREATE TABLE vereinuser.anlass (
+  anlaid      SERIAL PRIMARY KEY,
+  bezeichner  VARCHAR(20) NOT NULL,
+  ort         VARCHAR(20),
+  datum       TIMESTAMP NOT NULL,
+  kosten      NUMERIC(8, 2),
+  orgid       INTEGER NOT NULL,
+  CONSTRAINT chk_kosten CHECK (kosten IS NULL OR kosten >= 0)
+);
 
+-- Creating "Funktion" table
+CREATE TABLE vereinuser.funktion (
+  funkid      SERIAL PRIMARY KEY,
+  bezeichner  VARCHAR(20) NOT NULL
+);
 
-CREATE
-  TABLE vereinuser.Funktion
-  (
-    FunkID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR (20) NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Funktion ADD CONSTRAINT Funktion_PK PRIMARY KEY ( FunkID ) ;
+-- Creating "Funktionsbesetzung" table
+CREATE TABLE vereinuser.funktionsbesetzung (
+  antritt     TIMESTAMP NOT NULL,
+  ruecktritt  TIMESTAMP,
+  funkid      INTEGER NOT NULL,
+  persid      INTEGER NOT NULL,
+  PRIMARY KEY (funkid, persid, antritt),
+  CONSTRAINT chk_ruecktritt CHECK (antritt <= ruecktritt OR ruecktritt IS NULL)
+);
 
+-- Creating "Person" table
+CREATE TABLE vereinuser.person (
+  persid       SERIAL PRIMARY KEY,
+  name         VARCHAR(20) NOT NULL,
+  vorname      VARCHAR(15) NOT NULL,
+  strasse_nr   VARCHAR(20) NOT NULL,
+  plz          CHAR(4) NOT NULL,
+  ort          VARCHAR(20) NOT NULL,
+  bezahlt      CHAR(1) NOT NULL,
+  bemerkungen  VARCHAR(25),
+  eintritt     TIMESTAMP,
+  austritt     TIMESTAMP,
+  statid       INTEGER NOT NULL,
+  mentorid     INTEGER,
+  CONSTRAINT chk_austritt CHECK ((eintritt <= austritt OR austritt IS NULL) OR (eintritt IS NULL AND austritt IS NULL))
+);
 
-CREATE
-  TABLE vereinuser.Funktionsbesetzung
-  (
-    Antritt    TIMESTAMP(0) NOT NULL ,
-    Ruecktritt TIMESTAMP(0) ,
-    FunkID     INTEGER NOT NULL ,
-    PersID     INTEGER NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT chk_ruecktritt CHECK ( antritt <=
-ruecktritt OR ruecktritt                                                     IS
-NULL) ;
-ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT Funktionsbesetzung_PK PRIMARY KEY
-( FunkID, PersID, Antritt ) ;
+-- Creating "Spende" table
+CREATE TABLE vereinuser.spende (
+  spenid      SERIAL NOT NULL,
+  bezeichner  VARCHAR(20),
+  datum       TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+  betrag      NUMERIC(8, 2) NOT NULL,
+  sponid      INTEGER NOT NULL,
+  anlaid      INTEGER,
+  PRIMARY KEY (spenid, sponid)
+);
 
+-- Creating "Sponsor" table
+CREATE TABLE vereinuser.sponsor (
+  sponid       SERIAL PRIMARY KEY,
+  name         VARCHAR(20) NOT NULL,
+  strasse_nr   VARCHAR(20) NOT NULL,
+  plz          CHAR(4) NOT NULL,
+  ort          VARCHAR(20) NOT NULL,
+  spendentotal NUMERIC(8, 2) NOT NULL
+);
 
-CREATE
-  TABLE vereinuser.Person
-  (
-    PersID      INTEGER NOT NULL ,
-    Name        VARCHAR (20) NOT NULL ,
-    Vorname     VARCHAR (15) NOT NULL ,
-    Strasse_Nr  VARCHAR (20) NOT NULL ,
-    PLZ         CHAR (4) NOT NULL ,
-    Ort         VARCHAR (20) NOT NULL ,
-    bezahlt     CHAR (1) NOT NULL ,
-    Bemerkungen VARCHAR (25) ,
-    Eintritt    TIMESTAMP(0) ,
-    Austritt    TIMESTAMP(0) ,
-    StatID      INTEGER NOT NULL ,
-    MentorID    INTEGER
-  ) ;
-ALTER TABLE vereinuser.Person ADD CONSTRAINT chk_austritt CHECK ( (eintritt <= austritt OR
-austritt                                                         IS NULL) OR
-(
-  eintritt IS NULL AND austritt IS NULL
-)
-) ;
-ALTER TABLE vereinuser.Person ADD CONSTRAINT Person_PK PRIMARY KEY ( PersID ) ;
+-- Creating "Sponsorenkontakt" table
+CREATE TABLE vereinuser.sponsorenkontakt (
+  persid INTEGER NOT NULL,
+  sponid INTEGER NOT NULL,
+  PRIMARY KEY (persid, sponid)
+);
 
+-- Creating "Status" table
+CREATE TABLE vereinuser.status (
+  statid      SERIAL PRIMARY KEY,
+  bezeichner  VARCHAR(20) NOT NULL,
+  beitrag     INTEGER,
+  CONSTRAINT chk_beitrag_status CHECK (beitrag IS NULL OR beitrag >= 0)
+);
 
-CREATE
-  TABLE vereinuser.Spende
-  (
-    SpenID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR (20) ,
-    Datum      TIMESTAMP(0) DEFAULT CURRENT_DATE NOT NULL ,
-    Betrag     DECIMAL (8,2) NOT NULL ,
-    SponID     INTEGER NOT NULL ,
-    AnlaID     INTEGER
-  ) ;
-ALTER TABLE vereinuser.Spende ADD CONSTRAINT Spende_PK PRIMARY KEY ( SpenID, SponID ) ;
+-- Creating "Teilnehmer" table
+CREATE TABLE vereinuser.teilnehmer (
+  persid INTEGER NOT NULL,
+  anlaid INTEGER NOT NULL,
+  PRIMARY KEY (persid, anlaid)
+);
 
+-- Adding foreign key constraints
+ALTER TABLE vereinuser.anlass
+  ADD CONSTRAINT anlass_person_fk FOREIGN KEY (orgid) REFERENCES vereinuser.person (persid);
 
-CREATE
-  TABLE vereinuser.Sponsor
-  (
-    SponID       INTEGER NOT NULL ,
-    Name         VARCHAR (20) NOT NULL ,
-    Strasse_Nr   VARCHAR (20) NOT NULL ,
-    PLZ          CHAR (4) NOT NULL ,
-    Ort          VARCHAR (20) NOT NULL ,
-    Spendentotal DECIMAL (8,2) NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Sponsor ADD CONSTRAINT Sponsor_PK PRIMARY KEY ( SponID ) ;
+ALTER TABLE vereinuser.sponsorenkontakt
+  ADD CONSTRAINT fk_sponk_person FOREIGN KEY (persid) REFERENCES vereinuser.person (persid),
+  ADD CONSTRAINT fk_sponk_sponsor FOREIGN KEY (sponid) REFERENCES vereinuser.sponsor (sponid);
 
+ALTER TABLE vereinuser.teilnehmer
+  ADD CONSTRAINT fk_teiln_anlass FOREIGN KEY (anlaid) REFERENCES vereinuser.anlass (anlaid),
+  ADD CONSTRAINT fk_teiln_person FOREIGN KEY (persid) REFERENCES vereinuser.person (persid);
 
-CREATE
-  TABLE vereinuser.Sponsorenkontakt
-  (
-    PersID INTEGER NOT NULL ,
-    SponID INTEGER NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Sponsorenkontakt ADD CONSTRAINT Sponsorenkontakt_PK PRIMARY KEY (
-PersID, SponID ) ;
+ALTER TABLE vereinuser.funktionsbesetzung
+  ADD CONSTRAINT funktionsbesetzung_funktion_fk FOREIGN KEY (funkid) REFERENCES vereinuser.funktion (funkid),
+  ADD CONSTRAINT funktionsbesetzung_person_fk FOREIGN KEY (persid) REFERENCES vereinuser.person (persid);
 
+ALTER TABLE vereinuser.person
+  ADD CONSTRAINT person_person_fk FOREIGN KEY (mentorid) REFERENCES vereinuser.person (persid),
+  ADD CONSTRAINT person_status_fk FOREIGN KEY (statid) REFERENCES vereinuser.status (statid);
 
-CREATE
-  TABLE vereinuser.Status
-  (
-    StatID     INTEGER NOT NULL ,
-    Bezeichner VARCHAR (20) NOT NULL ,
-    Beitrag    INT
-  ) ;
-ALTER TABLE vereinuser.Status ADD CONSTRAINT chk_beitrag_status CHECK ( beitrag IS NULL OR
-(
-  beitrag >= 0
-)
-) ;
-ALTER TABLE vereinuser.Status ADD CONSTRAINT Status_PK PRIMARY KEY ( StatID ) ;
-
-
-CREATE
-  TABLE vereinuser.Teilnehmer
-  (
-    PersID INTEGER NOT NULL ,
-    AnlaID INTEGER NOT NULL
-  ) ;
-ALTER TABLE vereinuser.Teilnehmer ADD CONSTRAINT Teilnehmer_PK PRIMARY KEY ( PersID,
-AnlaID ) ;
-
-
-ALTER TABLE vereinuser.Anlass ADD CONSTRAINT Anlass_Person_FK FOREIGN KEY ( OrgID )
-REFERENCES vereinuser.Person ( PersID ) ;
-
-ALTER TABLE vereinuser.Sponsorenkontakt ADD CONSTRAINT FK_SPONK_PERSON FOREIGN KEY (
-PersID ) REFERENCES vereinuser.Person ( PersID ) ;
-
-ALTER TABLE vereinuser.Sponsorenkontakt ADD CONSTRAINT FK_SPONK_SPONSOR FOREIGN KEY (
-SponID ) REFERENCES vereinuser.Sponsor ( SponID ) ;
-
-ALTER TABLE vereinuser.Teilnehmer ADD CONSTRAINT FK_TEILN_ANLASS FOREIGN KEY ( AnlaID )
-REFERENCES vereinuser.Anlass ( AnlaID ) ;
-
-ALTER TABLE vereinuser.Teilnehmer ADD CONSTRAINT FK_TEILN_PERSON FOREIGN KEY ( PersID )
-REFERENCES vereinuser.Person ( PersID ) ;
-
-ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT Funktionsbesetzung_Funktion_FK
-FOREIGN KEY ( FunkID ) REFERENCES vereinuser.Funktion ( FunkID ) ;
-
-ALTER TABLE vereinuser.Funktionsbesetzung ADD CONSTRAINT Funktionsbesetzung_Person_FK
-FOREIGN KEY ( PersID ) REFERENCES vereinuser.Person ( PersID ) ;
-
-ALTER TABLE vereinuser.Person ADD CONSTRAINT Person_Person_FK FOREIGN KEY ( MentorID )
-REFERENCES vereinuser.Person ( PersID ) ;
-
-ALTER TABLE vereinuser.Person ADD CONSTRAINT Person_Status_FK FOREIGN KEY ( StatID )
-REFERENCES vereinuser.Status ( StatID ) ;
-
-ALTER TABLE vereinuser.Spende ADD CONSTRAINT Spende_Anlass_FK FOREIGN KEY ( AnlaID )
-REFERENCES vereinuser.Anlass ( AnlaID ) ;
-
-ALTER TABLE vereinuser.Spende ADD CONSTRAINT Spende_Sponsor_FK FOREIGN KEY ( SponID )
-REFERENCES vereinuser.Sponsor ( SponID ) ;
+ALTER TABLE vereinuser.spende
+  ADD CONSTRAINT spende_anlass_fk FOREIGN KEY (anlaid) REFERENCES vereinuser.anlass (anlaid),
+  ADD CONSTRAINT spende_sponsor_fk FOREIGN KEY (sponid) REFERENCES vereinuser.sponsor (sponid);
