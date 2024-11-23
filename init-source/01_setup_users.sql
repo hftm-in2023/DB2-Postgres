@@ -4,10 +4,7 @@
 
 -- CREATE USER equivalents:
 CREATE USER scott WITH PASSWORD 'tiger';
-ALTER USER scott SET default_tablespace = 'emp_tablespace';
-GRANT ALL PRIVILEGES ON TABLESPACE emp_tablespace TO scott;
 
-CREATE TABLESPACE verein_tablespace LOCATION '/var/lib/postgresql/data/verein_tablespace';
 -- Same note applies regarding disk size and autoextend
 
 CREATE USER vereinuser WITH PASSWORD 'vereinuser';
