@@ -1,13 +1,20 @@
-/*================================================*/
-/* Datenbanken I                                  */
-/* Einführungsbeispiel                            */
-/* Daten in Demotabellen einfügen                 */
-/*================================================*/
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO ***                               */
+/* SQLINES DEMO *** iel                            */
+/* SQLINES DEMO *** llen einfügen                 */
+/* SQLINES DEMO *** ==============================*/
 
--- ----------- 
--- Abteilungen 
--- -----------
+-- SQLINES DEMO ***  using a Pluggable Database (PDB).
+alter session set container=xepdb1;
 
+ALTER SESSION SET nls_date_format = 'DD-MON-YYYY'
+                  nls_date_language = 'AMERICAN';
+
+-- --... SQLINES DEMO ***
+-- Ab... SQLINES DEMO ***
+-- --... SQLINES DEMO ***
+
+-- SQLINES FOR EVALUATION USE ONLY (14 DAYS)
 INSERT INTO scott.dept
        (deptno, dname, loc)
 VALUES (10, 'ACCOUNTING', 'NEW YORK');
@@ -24,45 +31,39 @@ INSERT INTO scott.dept
        (deptno, dname, loc )
 VALUES (40, 'OPERATIONS', 'BOSTON');
 
--- ----------- 
--- Angestellte 
--- -----------
+-- --... SQLINES DEMO ***
+-- An... SQLINES DEMO ***
+-- --... SQLINES DEMO ***
 
 INSERT INTO scott.emp 
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7369, 'SMITH',  'CLERK',
-        '1980-12-17',
+        TO_DATE('17-DEC-1980', 'DD-MON-YYYY'),
         800, NULL, 20);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7499, 'ALLEN',  'SALESMAN',
-        '1981-02-20',
+        TO_DATE('20-FEB-1981', 'DD-MON-YYYY'),
         1600,  300, 30);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7521, 'WARD',   'SALESMAN',
-        '1981-02-22',
+        TO_DATE('22-FEB-1981', 'DD-MON-YYYY'),
         1250,  500, 30);
 
 INSERT INTO scott.emp 
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7566, 'JONES',  'MANAGER',
-        '1981-04-02',
+        TO_DATE('2-APR-1981', 'DD-MON-YYYY'),
         2975, NULL, 20);
 
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
 VALUES (7654, 'MARTIN', 'SALESMAN',
-        '1981-09-28',
+        TO_DATE('28-SEP-1981', 'DD-MON-YYYY'),
         1250, 1400, 30);
-        
-INSERT INTO scott.emp
-       (empno, ename, job, hiredate, sal, comm, deptno)
-VALUES (7698, 'BLAKE',  'MANAGER',
-        '1981-05-01',
-        2850, NULL,
         
 INSERT INTO scott.emp
        (empno, ename, job, hiredate, sal, comm, deptno)
@@ -171,6 +172,6 @@ UPDATE scott.emp
 WHERE empno = 7934;
 
 
--- Transaktion abschliessen
+-- SQLINES DEMO *** liessen
 
 COMMIT;

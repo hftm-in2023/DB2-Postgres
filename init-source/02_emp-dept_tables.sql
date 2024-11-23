@@ -1,48 +1,52 @@
-/*================================================*/
-/* Datenbanken I                                  */
-/* Einführungsbeispiel                            */
-/* Tabellen erzeugen                              */
-/*================================================*/
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO ***                               */
+/* SQLINES DEMO *** iel                            */
+/* SQLINES DEMO ***                               */
+/* SQLINES DEMO *** ==============================*/
 
-/*================================================*/
-/* Tabelle: DEPT                                  */
-/*================================================*/
-CREATE TABLE dept  (
-   deptno      INTEGER          NOT NULL,
+-- SQLINES DEMO ***  using a Pluggable Database (PDB).
+alter session set container=xepdb1;
+
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO ***                               */
+/* SQLINES DEMO *** ==============================*/
+-- SQLINES FOR EVALUATION USE ONLY (14 DAYS)
+CREATE TABLE scott.dept  (
+   deptno      SMALLINT          NOT NULL,
    dname       VARCHAR(14)       NOT NULL,
    loc         VARCHAR(13)       NOT NULL,
    CONSTRAINT pk_dept PRIMARY KEY (deptno)
 );
 
-/*================================================*/
-/* Tabelle: EMP                                   */
-/*================================================*/
-CREATE TABLE emp  (
-   empno       INTEGER          NOT NULL,
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO ***                               */
+/* SQLINES DEMO *** ==============================*/
+CREATE TABLE scott.emp  (
+   empno       SMALLINT          NOT NULL,
    ename       VARCHAR(10)       NOT NULL,
    job         VARCHAR(9)        NOT NULL,
-   mgr         INTEGER,
-   hiredate    DATE               NOT NULL,
-   sal         NUMERIC(7,2)        NOT NULL,
-   comm        NUMERIC(7,2),
-   deptno      INTEGER          NOT NULL,
+   mgr         SMALLINT,
+   hiredate    TIMESTAMP(0)               NOT NULL,
+   sal         DECIMAL(7,2)        NOT NULL,
+   comm        DECIMAL(7,2),
+   deptno      SMALLINT          NOT NULL,
    CONSTRAINT pk_emp PRIMARY KEY (empno),
    CONSTRAINT fk_emp_relation__dept FOREIGN KEY (deptno)
-     REFERENCES dept (deptno),
+     REFERENCES scott.dept (deptno),
    CONSTRAINT fk_emp_relation__emp FOREIGN KEY (mgr)
-     REFERENCES emp (empno)
+     REFERENCES scott.emp (empno)
 );
 
-/*================================================*/
-/* Index: RELATION_3_FK                           */
-/*================================================*/
-CREATE INDEX relation_3_fk ON emp (
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO *** _FK                           */
+/* SQLINES DEMO *** ==============================*/
+CREATE INDEX relation_3_fk ON scott.emp (
    deptno ASC
 );
 
-/*================================================*/
-/* Index: RELATION_16_FK                          */
-/*================================================*/
-CREATE INDEX relation_16_fk ON emp (
+/* SQLINES DEMO *** ==============================*/
+/* SQLINES DEMO *** 6_FK                          */
+/* SQLINES DEMO *** ==============================*/
+CREATE INDEX relation_16_fk ON scott.emp (
    mgr ASC
 );
