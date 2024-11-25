@@ -31,8 +31,6 @@ postgres-docker/
     └── 03_employee_data.sql
 ```
 
-Stelle sicher, dass jede SQL-Datei gültige Befehle für PostgreSQL enthält und vermeide unnötige Komplexität, wie die Erstellung von Tablespaces in Docker.
-
 ## Schritt 2: Dockerfile einrichten
 Erstelle eine `Dockerfile` im Verzeichnis `postgres-docker`:
 
@@ -42,7 +40,7 @@ FROM postgres:latest
 
 # Setze Umgebungsvariablen (nach Bedarf anpassen)
 ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=adminpassword
+ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=postgreProjekt
 
 # Kopiere die SQL-Skripte in das Initialisierungsverzeichnis
@@ -53,8 +51,6 @@ Dieses Dockerfile:
 - Verwendet das offizielle PostgreSQL-Image.
 - Setzt Umgebungsvariablen für die Datenbank, den Benutzer und das Passwort.
 - Kopiert die SQL-Skripte in das Standard-Initialisierungsverzeichnis (`/docker-entrypoint-initdb.d/`). PostgreSQL führt diese Skripte während der Initialisierung automatisch aus.
-
-**Hinweis**: Passwörter sollten nicht in der Dockerfile abgelegt werden. Verwende stattdessen in Produktionsumgebungen Umgebungsvariablen oder Docker-Secrets.
 
 ## Schritt 3: Docker-Image erstellen
 
