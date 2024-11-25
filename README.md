@@ -38,18 +38,12 @@ Erstelle eine `Dockerfile` im Verzeichnis `postgres-docker`:
 # Verwende das offizielle PostgreSQL-Image
 FROM postgres:latest
 
-# Setze Umgebungsvariablen (nach Bedarf anpassen)
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=postgreProjekt
-
 # Kopiere die SQL-Skripte in das Initialisierungsverzeichnis
 COPY init-source/*.sql /docker-entrypoint-initdb.d/
 ```
 
 Dieses Dockerfile:
 - Verwendet das offizielle PostgreSQL-Image.
-- Setzt Umgebungsvariablen für die Datenbank, den Benutzer und das Passwort.
 - Kopiert die SQL-Skripte in das Standard-Initialisierungsverzeichnis (`/docker-entrypoint-initdb.d/`). PostgreSQL führt diese Skripte während der Initialisierung automatisch aus.
 
 ## Schritt 3: Docker-Image erstellen
