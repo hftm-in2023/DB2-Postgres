@@ -1,3 +1,4 @@
+
 -- Tabelle: Status
 CREATE TABLE Status (
     StatID INTEGER PRIMARY KEY,
@@ -68,7 +69,6 @@ CREATE TABLE Anlass (
     Kosten NUMERIC(8,2),
     OrgID INTEGER
 );
-
 -- Tabelle: Teilnehmer
 CREATE TABLE Teilnehmer (
     PersID INTEGER,
@@ -77,7 +77,6 @@ CREATE TABLE Teilnehmer (
     FOREIGN KEY (PersID) REFERENCES Person (PersID),
     FOREIGN KEY (AnlaID) REFERENCES Anlass (AnlaID)
 );
-
 -- Tabelle: Spende
 CREATE TABLE Spende (
     SpenID INTEGER PRIMARY KEY,
