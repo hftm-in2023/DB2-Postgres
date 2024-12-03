@@ -1,3 +1,6 @@
+SET datestyle = 'German, DMY';
+
+
 -- Werte für Tabelle: Status
 INSERT INTO Status (StatID, Bezeichner, Beitrag) VALUES
 (1, 'Junior', 0),
