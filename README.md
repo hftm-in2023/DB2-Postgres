@@ -79,8 +79,13 @@ docker logs my_postgres
    ```sh
    docker rm -f my_postgres
    docker volume prune -f
-   docker run -p 5432:5432 --name my_postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=adminpassword -e POSTGRES_DB=postgreProjekt -d postgres-with-data
+   docker run -p 5432:5432 --name my_postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=postgreProjekt -d postgres-with-data
    ```
+   oder
+   ```sh
+   docker build --no-cache -t postgres-with-data .
+   ```
+   um den Container ohne Cache zu builden
 
 ## Schritt 6: Verbindung zur Datenbank herstellen
 Sobald der Container läuft, kannst du dich mit der PostgreSQL-Instanz verbinden:
