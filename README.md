@@ -1,12 +1,14 @@
 
-# 🚀 Schritt-für-Schritt-Anleitung zur Einrichtung von PostgreSQL in Docker mit vorhandenen SQL-Daten
+# 🚀 PostgreSQL in Docker mit SQL-Daten und Benutzerrechten einrichten
 
-Diese Anleitung zeigt, wie man ein Docker-Image für PostgreSQL erstellt, das SQL-Skripte enthält, um eine Datenbank und Daten einzurichten.
+Dieses Dokument ist eine Schritt-für-Schritt-Anleitung, um PostgreSQL in Docker einzurichten, einschließlich der Initialisierung mit SQL-Daten und Benutzerrechten.
+
+---
 
 ## 📋 Voraussetzungen
 
 - 🐋 Docker installiert
-- 📄 SQL-Skriptdateien zur Initialisierung der Datenbank und zum Einfügen von Daten
+- 📄 SQL-Skriptdateien zur Initialisierung der Datenbank und Benutzerrechte
 - 📚 Grundlegendes Verständnis von Docker und PostgreSQL
 
 ---
@@ -27,8 +29,13 @@ postgres-docker/
 ├── Dockerfile
 └── init-source/
     ├── 00_tables.sql
-    └── 01_data.sql
+    ├── 01_data.sql
+    └── 02_users.sql
 ```
+
+- `00_tables.sql`: Definition der Tabellenstruktur
+- `01_data.sql`: Initialdaten
+- `02_users.sql`: Benutzer und Rollen mit Berechtigungen
 
 ---
 
@@ -44,9 +51,9 @@ FROM postgres:latest
 COPY init-source/*.sql /docker-entrypoint-initdb.d/
 ```
 
-**Dieses Dockerfile:**
+**Funktionen dieses Dockerfiles:**
 - Verwendet das offizielle PostgreSQL-Image.
-- Kopiert die SQL-Skripte in das Standard-Initialisierungsverzeichnis (`/docker-entrypoint-initdb.d/`). PostgreSQL führt diese Skripte während der Initialisierung automatisch aus.
+- Kopiert die SQL-Skripte in das Verzeichnis `/docker-entrypoint-initdb.d/`, wo PostgreSQL sie bei der Initialisierung automatisch ausführt.
 
 ---
 
@@ -58,7 +65,7 @@ Baue das Docker-Image mit folgendem Befehl:
 docker build -t postgres-with-data .
 ```
 
-Falls du den Build-Cache umgehen möchtest, verwende stattdessen:
+Falls du den Build-Cache umgehen möchtest, verwende:
 
 ```sh
 docker build --no-cache -t postgres-with-data .
@@ -70,19 +77,17 @@ docker build --no-cache -t postgres-with-data .
 
 ## 🚢 Schritt 4: Docker-Container starten
 
-Starte den Container:
+Starte den Container mit dem folgenden Befehl:
 
 ```sh
 docker run -p 5432:5432 --name my_postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=postgreProjekt -d postgres-with-data
 ```
 
-**Erklärung:**
+**Parameterbeschreibung:**
 - `-p 5432:5432`: Mappt den PostgreSQL-Port auf den Host.
 - `--name my_postgres`: Benennt den Container.
 - `-e POSTGRES_USER`, `-e POSTGRES_PASSWORD`, `-e POSTGRES_DB`: Setzt Benutzer, Passwort und Datenbanknamen.
 - `-d`: Führt den Container im Hintergrund aus.
-
-Beim Starten des Containers wird ein Volumen erstellt, das die Daten speichert. Wird dieses nicht explizit gelöscht (siehe Schritt 5), bleiben die Daten erhalten, auch wenn der Container gelöscht wird.
 
 ---
 
@@ -94,7 +99,7 @@ Prüfe die Container-Logs:
 docker logs my_postgres
 ```
 
-Falls die Initialisierung fehlschlägt, entferne den Container und das Volume und erstelle sie neu:
+Falls die Initialisierung fehlschlägt, entferne den Container und das Volume, und erstelle sie neu:
 
 ```sh
 docker rm -f my_postgres
@@ -106,7 +111,7 @@ docker run -p 5432:5432 --name my_postgres -e POSTGRES_USER=admin -e POSTGRES_PA
 
 ## 🔗 Schritt 6: Verbindung zur Datenbank herstellen
 
-Verwende den folgenden Befehl, um dich mit der PostgreSQL-Datenbank zu verbinden:
+### Verbindung per Docker-Befehl:
 
 ```sh
 docker exec -it my_postgres psql -U admin -d postgreProjekt
@@ -115,7 +120,7 @@ docker exec -it my_postgres psql -U admin -d postgreProjekt
 Prüfe die Datenbankinhalte mit PostgreSQL-Befehlen:
 
 ```sql
-\l           -- Listet alle Datenbanken auf
+\l           -- Listet alle Datenbanken
 \c postgreProjekt -- Verbindet mit der Datenbank
 \dt          -- Zeigt alle Tabellen
 ```
@@ -163,6 +168,27 @@ Sobald die Verbindung hergestellt ist:
 
 ---
 
+## 📂 Benutzer- und Rechteverwaltung (`02_users.sql`)
+
+Die Datei `02_users.sql` definiert Rollen und Benutzer für die Datenbank. Hier ein Überblick:
+
+- **Rollen erstellt**: `admin_role`, `editor_role`, `viewer_role`.
+- **Benutzer definiert**:
+  - `dominikmeyer` (Admin)
+  - `petrameyer` (Editor)
+  - `romygruber` (Viewer)
+- **Automatische Rechte auf zukünftige Tabellen sichergestellt**.
+- **Validierung durch Abfrage der Rollen-Zuordnung**:
+
+```sql
+SELECT r1.rolname AS role_name, r2.rolname AS member_name
+FROM pg_roles r1
+LEFT JOIN pg_auth_members ON r1.oid = pg_auth_members.roleid
+LEFT JOIN pg_roles r2 ON r2.oid = pg_auth_members.member;
+```
+
+---
+
 ## ⚔️ Unterschiede zwischen PostgreSQL und Oracle
 
 | Kriterium               | PostgreSQL                                                                                   | Oracle                                                                                   |
@@ -178,5 +204,3 @@ Sobald die Verbindung hergestellt ist:
 
 - **PostgreSQL**: Modern, flexibel, kosteneffizient. Perfekt für Startups und Cloud-Umgebungen.
 - **Oracle**: Leistungsstark, aber teuer. Entwickelt für Grossunternehmen mit hohen Anforderungen.
-
----
