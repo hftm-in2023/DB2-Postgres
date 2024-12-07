@@ -30,7 +30,7 @@ postgres-docker/
 ```
 
 ## Schritt 2: Dockerfile einrichten
-Erstelle eine `Dockerfile` im Verzeichnis `postgres-docker`:
+Erstelle ein `Dockerfile` im Verzeichnis `postgres-docker`:
 
 ```Dockerfile
 # Verwende das offizielle PostgreSQL-Image
@@ -110,7 +110,7 @@ Diese Anleitung zeigt, wie du dich mit DBeaver mit der PostgreSQL-Datenbank verb
 
 ### Schritt 1: DBeaver öffnen und neue Verbindung erstellen
 1. Öffne DBeaver.
-2. Klicke auf **File > New > Database Connection** oder auf das Datenbank-Symbol in der oberen Menüleiste.
+2. Klicke auf **File > New > DBeaver >Database Connection** oder auf das Datenbank-Symbol in der oberen Menüleiste.
 3. Wähle **PostgreSQL** aus der Liste der unterstützten Datenbanken und klicke auf **Next**.
 
 ---
@@ -138,8 +138,21 @@ Fülle die Felder wie folgt aus:
 Sobald die Verbindung hergestellt ist:
 1. Navigiere in der linken Baumansicht zu deiner Datenbank (`postgreProjekt`).
 2. Öffne den SQL-Editor, um Abfragen auszuführen, z. B.:
-   ```sql
-   \l   -- Listet alle Datenbanken auf
-   \dt  -- Listet alle Tabellen in der aktuellen Datenbank auf
-   SELECT * FROM <table_name>;  -- Zeigt Daten einer bestimmten Tabelle
+  - **Alle Datenbanken auflisten**:
+     ```sql
+     SELECT datname FROM pg_database;
+     ```
 
+   - **Alle Tabellen in der aktuellen Datenbank anzeigen**:
+     ```sql
+     SELECT table_name 
+     FROM information_schema.tables 
+     WHERE table_schema = 'public';
+     ```
+
+   - **Daten einer bestimmten Tabelle anzeigen**:
+     ```sql
+     SELECT * FROM <table_name>;
+     ```
+
+Ersetze `<table_name>` durch den Namen der Tabelle, die du abfragen möchtest.
