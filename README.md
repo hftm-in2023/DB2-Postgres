@@ -157,22 +157,80 @@ Sobald die Verbindung hergestellt ist:
 
 Ersetze `<table_name>` durch den Namen der Tabelle, die du abfragen möchtest.
 
-### Unterschiede zwischen PostgreSQL und Oracle
+# Unterschiede zwischen PostgreSQL und Oracle
 
-1. **Datentypen:**
-   - **PostgreSQL:** Verwendet SQL-Standard-Datentypen wie `SERIAL` und `TEXT`.
-   - **Oracle:** Nutzt eigene Typen wie `VARCHAR2` und `NUMBER`.
-
-2. **Constraint-Syntax:**
-   - **PostgreSQL:** Einfachere Syntax, die stärker auf SQL-Standards basiert.
-   - **Oracle:** Umfassende `CHECK`-Constraints und eigene Implementierungen für Fremdschlüssel.
-
-3. **Komplexität der Datenstruktur:**
-   - **PostgreSQL:** Geeignet für einfache bis mittlere Anwendungsfälle mit einer flachen Datenhierarchie.
-   - **Oracle:** Optimiert für große, komplexe Datenbanken mit hohem Bedarf an Integritätsprüfungen und detaillierten Geschäftsregeln.
-
-4. **Anwendungsbereiche:**
-   - **PostgreSQL:** Für einfache bis mittlere Projekte, die SQL-Standardkonformität benötigen.
-   - **Oracle:** Für große, komplexe Geschäftsmodelle mit umfangreichen Datenbankanforderungen und Integritätsprüfungen.
+Ein Vergleich der beiden Datenbankmanagementsysteme in Bezug auf Datentypen, Constraint-Syntax, Datenstruktur-Komplexität und Anwendungsbereiche.
 
 ---
+
+## **1. Datentypen**
+### **PostgreSQL**
+- Verwendet SQL-Standard-Datentypen wie `SERIAL`, `TEXT`, `NUMERIC`.
+- Unterstützt moderne Datentypen wie:
+  - `JSONB` für strukturierte JSON-Daten.
+  - `ARRAY` für Arrays.
+  - `UUID` für universell eindeutige IDs.
+- Ab Version 10 wird `GENERATED AS IDENTITY` bevorzugt (entspricht SQL-Standard).
+
+### **Oracle**
+- Nutzt proprietäre Datentypen wie:
+  - `VARCHAR2` (statt Standard `VARCHAR`).
+  - `NUMBER` (flexibel für Integer, Float etc., mit Präzision).
+- Unterstützung für JSON-Datentypen in neueren Versionen (langsamer als PostgreSQL).
+- Keine direkten Äquivalente zu `SERIAL`; nutzt stattdessen SEQUENCES.
+
+---
+
+## **2. Constraint-Syntax**
+### **PostgreSQL**
+- Basiert stärker auf SQL-Standards.
+- Unterstützt:
+  - CHECK, UNIQUE, NOT NULL, PRIMARY KEY und FOREIGN KEY Constraints.
+  - Komplexe CHECK-Constraints (z. B. in Kombination mit Funktionen).
+- Flexibel einsetzbar in deklarativen Tabellen und Partitionierungen.
+
+### **Oracle**
+- CHECK-Constraints ebenfalls sehr robust und vielseitig.
+- Unterstützt umfangreiche Integritätsprüfungen und Constraints für partitionierte Tabellen.
+- UNIQUE und FOREIGN KEYS oft enger mit Oracle-Funktionen wie Materialized Views verknüpft.
+
+---
+
+## **3. Komplexität der Datenstruktur**
+### **PostgreSQL**
+- Gut geeignet für einfache bis mittlere Hierarchien und Strukturen.
+- Unterstützt:
+  - Rekursive Abfragen (`WITH RECURSIVE`).
+  - JSONB-Funktionen für semi-strukturierte Daten.
+- Skaliert gut horizontal (Sharding, Partitionierung).
+
+### **Oracle**
+- Optimiert für große, komplexe Datenbanken:
+  - Unterstützung für Advanced Queueing und Materialized Views.
+  - Umfangreiche Partitionierungsoptionen.
+- Bietet starke vertikale Skalierungsoptionen und Unternehmens-Features wie Oracle RAC (Real Application Clusters).
+
+---
+
+## **4. Anwendungsbereiche**
+### **PostgreSQL**
+- Ideal für:
+  - Startups und mittelgroße Projekte.
+  - Szenarien, die SQL-Standardkonformität und Open-Source-Flexibilität erfordern.
+  - Cloud-Umgebungen (z. B. Amazon RDS, Google Cloud SQL).
+- Kann zunehmend auch in größeren Szenarien überzeugen.
+
+### **Oracle**
+- Entwickelt für große Unternehmen und komplexe Geschäftsmodelle.
+- Häufig verwendet in:
+  - Banken, Versicherungen, Einzelhandel.
+  - Anwendungen mit strengen Anforderungen an Datenintegrität und Hochverfügbarkeit.
+- Umfassende, aber kostenintensive Lizenzmodelle.
+
+---
+
+## **Fazit**
+PostgreSQL und Oracle haben unterschiedliche Stärken:
+- **PostgreSQL**: Modern, flexibel, kosteneffizient und geeignet für einfache bis komplexe Anwendungen.
+- **Oracle**: Leistungsstark für große, komplexe Datenbanken mit hohen Anforderungen, jedoch kostenintensiv und proprietär.
+
