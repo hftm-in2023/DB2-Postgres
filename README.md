@@ -156,3 +156,23 @@ Sobald die Verbindung hergestellt ist:
      ```
 
 Ersetze `<table_name>` durch den Namen der Tabelle, die du abfragen möchtest.
+
+### Unterschiede zwischen PostgreSQL und Oracle
+
+1. **Datentypen:**
+   - **PostgreSQL:** Verwendet SQL-Standard-Datentypen wie `SERIAL` und `TEXT`.
+   - **Oracle:** Nutzt eigene Typen wie `VARCHAR2` und `NUMBER`.
+
+2. **Constraint-Syntax:**
+   - **PostgreSQL:** Einfachere Syntax, die stärker auf SQL-Standards basiert.
+   - **Oracle:** Umfassende `CHECK`-Constraints und eigene Implementierungen für Fremdschlüssel.
+
+3. **Komplexität der Datenstruktur:**
+   - **PostgreSQL:** Geeignet für einfache bis mittlere Anwendungsfälle mit einer flachen Datenhierarchie.
+   - **Oracle:** Optimiert für große, komplexe Datenbanken mit hohem Bedarf an Integritätsprüfungen und detaillierten Geschäftsregeln.
+
+4. **Anwendungsbereiche:**
+   - **PostgreSQL:** Für einfache bis mittlere Projekte, die SQL-Standardkonformität benötigen.
+   - **Oracle:** Für große, komplexe Geschäftsmodelle mit umfangreichen Datenbankanforderungen und Integritätsprüfungen.
+
+---
